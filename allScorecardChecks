@@ -1,0 +1,14 @@
+#!/bin/env bash
+
+checks="Dangerous-Workflow,Security-Policy,CII-Best-Practices,Code-Review,Maintained,CI-Tests,Contributors,Token-Permissions,Branch-Protection,Signed-Releases,Vulnerabilities,Fuzzing,Dependency-Update-Tool,Packaging,Binary-Artifacts,SAST,Pinned-Dependencies,License"
+
+for c in ${checks//,/ }; do
+    echo -n "scorecard: check: $c"
+    output="$(scorecard-linux-amd64 2>&1 --show-details --local=. --checks=${c})"
+    if [[ $? -eq 0 ]]; then
+        echo " - OK"
+        echo "$output"
+    else
+        echo " - UNSUPPORTED"
+    fi
+done
